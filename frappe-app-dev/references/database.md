@@ -41,11 +41,8 @@ Use `get_all` for server-side logic. Use `get_list` in user-facing APIs.
 ## Writing data
 
 ```python
-# Create — always use new_doc, not frappe.get_doc({"doctype": ...})
-doc = frappe.new_doc("Expense")
-doc.title = "Lunch"
-doc.amount = 50
-doc.append("items", {"item_code": "ITEM-001"})  # child rows via .append
+# Create
+doc = frappe.get_doc({"doctype": "Expense", "title": "Lunch", "amount": 50})
 doc.insert()
 
 # Update via doc

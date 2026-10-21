@@ -1,14 +1,16 @@
 ---
 name: support-ticket
-description: >
+description: >-
   Handle Frappe/ERPNext client support tickets: triage a reported issue/error,
   request site data via sandbox-safe System Console snippets, trace code paths,
   and fix with correct branch/commit flow. Use whenever the user pastes a
-  client-reported issue, symptom, or error log, gives a ticket number to read
-  via frappectl, or asks for code to fetch data from a client's site — e.g.
+  client-reported issue, symptom, or error log, gives a ticket number to read,
+  or asks for code to fetch data from a client's site — e.g.
   "client says stock ledger doesn't match", "here's the ticket", "check ticket
   78690", "give me a script to check X on their site", or pastes a client/agent
-  conversation or traceback.
+  conversation or traceback. Also use to refresh context from the latest
+  communication — "check the latest client reply", "any new reply on the ticket",
+  "refresh the thread".
 ---
 
 # Support ticket workflow
@@ -56,6 +58,11 @@ chain with `frappectl` (read-only profile):
   ```
   `docinfo.communications` = the email thread (`content`, `sender`,
   `communication_date`); `docinfo.comments` = internal agent notes.
+
+**Refreshing the thread:** when asked to check the latest reply or refresh
+context, re-run the `get_docinfo` call and read the newest entries in
+`docinfo.communications` (sort by `communication_date`) — the chain is updated
+on the server, so re-fetch rather than relying on what was pulled earlier.
 
 ## 1. Classify → pick the outcome
 

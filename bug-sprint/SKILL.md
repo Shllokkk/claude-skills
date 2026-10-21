@@ -18,7 +18,7 @@ primarily being worked.
 
 Spans many sessions — this skill is the contract. General branching, commit, PR-target,
 attribution, SQL and comment rules live in **CLAUDE.md**; framework details in
-`frappe-app-dev`; code shape in `code-style`; review lens in `quality-code-review`. This
+`frappe-app-dev`; code shape in `code-style`; review lens in `frappe-code-review`. This
 file holds only the sprint-specific deltas. **Load `code-style` (and `frappe-app-dev`)
 via the Skill tool before writing any code — see Sprint rules; this is mandatory, not a
 pointer.**
@@ -93,6 +93,14 @@ wasted — don't open backports until the develop greptile loop has converged.
 gh api repos/frappe/erpnext/pulls/<PR>/comments --jq '.[] | select(.user.login|test("greptile";"i"))'
 gh api repos/frappe/erpnext/pulls/<PR>/comments -X POST -f body="..." -F in_reply_to=<comment_id>
 ```
+
+## Merge queue (heavy CI)
+
+Heavy MariaDB tests don't run on PR open — only light checks (`linters`, `Check Commit Titles`) do.
+Once greptile is clean and light checks pass, comment `@mergifyio queue` on the PR (develop +
+each backport) to batch it into the heavy suite (batches of 5). Only comment when the user asks to
+queue/merge. For full CI on a single PR, add the `merge-alone` label instead (runs the suite alone,
+then auto-merges).
 
 ## Backports (CLAUDE.md covers pinning, "develop first / never below v15", labels)
 
