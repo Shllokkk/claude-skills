@@ -72,7 +72,7 @@ wasted — don't open backports until the develop greptile loop has converged.
   explicitly asks (then use the repo's probes; also for non-obvious backports).
 - Be open to design flaws / refactors, not just one-line patches.
 - **One commit per bug**, clubbed into one PR; flag when a high-risk fix needs its own PR.
-- **Tests:** per bug, add a minimal test (or alter the existing one) **only if needed** and only test backend behaviour and run the concerned test file locally on test sites (each bench has its own test site);
+- **Tests:** per bug, add a minimal test (or alter the existing one) **only if needed** (it must fail without the fix) and only test backend behaviour and run the concerned test file locally on test sites (each bench has its own test site);
   fix + its test go in the **same commit**.
 - **Develop PR description:** a couple of lines, plain human language — the underlying
   bug and the fix and also mention any additional bugs fixed. End with

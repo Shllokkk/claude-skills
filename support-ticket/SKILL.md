@@ -66,8 +66,10 @@ on the server, so re-fetch rather than relying on what was pulled earlier.
 
 ## 1. Classify → pick the outcome
 
-Form a hypothesis; don't fix before data confirms it. Outcomes — the later ones
-are often reached only after steps 2–4:
+Form your own hypothesis from the code and data — the ticket and any client/agent
+thread are symptoms, not a diagnosis; don't anchor on a guessed cause. Don't fix
+before data confirms it. Outcomes — the later ones are often reached only after
+steps 2–4:
 - **Functional / "how it works"** (setting, permission, misunderstood workflow)
   → explain using the findings; draft a client reply. No fix.
 - **Confirmed code bug, patchable** → fix via steps 2–5.
@@ -112,7 +114,7 @@ play (doctype / report / whitelisted method).
 
 ### Code bug
 - Analyze edge cases + regression impact deeply before fixing; don't patch the
-  symptom. Add test cases where warranted.
+  symptom. Add a regression test where warranted — one that fails without the fix.
 - Test sites: v16 → `testsite.localhost`, v15 → `v15test.localhost`.
 - Branch off `develop` by default; `version-x-hotfix` only if the code is gone
   from `develop`. Everything else — branching, commits, security messages,
