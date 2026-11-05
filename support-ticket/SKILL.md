@@ -3,7 +3,7 @@ name: support-ticket
 description: >-
   Handle Frappe/ERPNext client support tickets: triage a reported issue/error,
   request site data via sandbox-safe System Console snippets, trace code paths,
-  and fix with correct branch/commit flow. Use whenever the user pastes a
+  and pin the root cause (code fixes then follow dev-workflow). Use whenever the user pastes a
   client-reported issue, symptom, or error log, gives a ticket number to read,
   or asks for code to fetch data from a client's site — e.g.
   "client says stock ledger doesn't match", "here's the ticket", "check ticket
@@ -113,12 +113,7 @@ play (doctype / report / whitelisted method).
 ## 5. Fix
 
 ### Code bug
-- Analyze edge cases + regression impact deeply before fixing; don't patch the
-  symptom. Add a regression test where warranted — one that fails without the fix.
-- Test sites: v16 → `testsite.localhost`, v15 → `v15test.localhost`.
-- Branch off `develop` by default; `version-x-hotfix` only if the code is gone
-  from `develop`. Everything else — branching, commits, security messages,
-  PRs, backports — follows CLAUDE.md branching + commit rules.
+Follow `dev-workflow`, and backport down to the client's version line.
 
 ### Data repair (data-inconsistency outcome)
 Run via the client's System Console (writes persist only with the Commit box
@@ -130,6 +125,24 @@ ticked). The script must be:
 - **Verifiable** — print before/after so the client's output confirms the change.
 Have an accountant/user confirm the correct end state first. If the same bad
 state could recur, the root-cause code gap is a separate code-bug fix.
+
+## Running a script on a Frappe Cloud SSH bench
+
+Only when the user (not the client, who has Desk only) has SSH access to the bench. Use the
+FC **web SSH terminal** (local `ssh` needs a fresh cert, ~6 h, Bench → SSH).
+
+1. The script ends with `if __name__ == "__main__":` / `main()`.
+2. Mac: `base64 -i script.py | tr -d '\n' | pbcopy`
+3. In the web terminal, paste the base64 over the placeholder (keep the quotes):
+   ```bash
+   echo 'PASTE_BASE64_HERE' | base64 -d > ~/frappe-bench/script.py
+   ```
+4. Run it with `runpy` — never `bench execute` (not importable) or `exec(open())`
+   (IPython splits globals/locals → `NameError`). Paths must be absolute; the console's
+   cwd is `sites/`:
+   ```bash
+   bench --site {site} console <<< "import runpy; runpy.run_path('/home/frappe/frappe-bench/script.py', run_name='__main__')"
+   ```
 
 ## System Console sandbox rules
 
